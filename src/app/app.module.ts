@@ -9,13 +9,15 @@ import { SearchComponent } from './features/search/search.component';
 import { CartComponent } from './features/cart/cart.component';
 import { LoginComponent } from './features/login/login.component';
 import { FormsModule } from '@angular/forms';
+import { IntToArrayPipe } from './shared/pipes/int-to-array.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
     SearchComponent,
     CartComponent,
-    LoginComponent
+    LoginComponent,
+    IntToArrayPipe
   ],
   imports: [
     BrowserModule,
