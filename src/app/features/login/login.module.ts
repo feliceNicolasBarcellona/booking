@@ -10,7 +10,7 @@ import { FormsModule } from '@angular/forms';
   declarations: [ LoginComponent ],
   imports: [
     CommonModule, FormsModule, RouterModule.forChild([
-      {path: '', component: LoginModule }
+      { path: '', component: LoginComponent }
     ])
   ]
 })
