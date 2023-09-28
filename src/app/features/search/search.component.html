@@ -1,131 +1,48 @@
-<!-- features/search/search.component.html -->
 <div class="wrapper three-cols">
-  <!--SIDEBAR-->
-  <div class="card side-bar scrollable">
-    <div class="title">Search</div>
-    <div class="content">
-      <form #f="ngForm" (submit)="searchHotels(f.value.text)">
-        <input
-          type="text"
-          placeholder="City (Rome or Milan)"
-          [ngModel]="text"
-          name="text"
-        />
-        <button type="submit">SEARCH</button>
-      </form>
 
-      <div class="separator"></div>
-      <div class="font-big">Hotel in {{ text }}</div>
+  <app-card title="Search" customCls="side-bar" [isScrollable]="true">
+    <app-hotel-form
+      [text]="text"
+      (search)="searchHotels($event)"
+    ></app-hotel-form>
 
-      <div
-        class="horiz-grid separator"
-        *ngFor="let hotel of hotels"
-        (click)="setActive(hotel)"
-        [ngClass]="{ active: hotel.id === active?.id }"
-      >
-        <div>{{ hotel.name }}</div>
-        <div>da € {{ hotel.rooms[0].price }}</div>
-      </div>
+    <app-separator></app-separator>
 
-      <div class="separator"></div>
-      <div class="horiz-grid">
-        <div></div>
-        <em *ngIf="hotels">{{ hotels.length }} results</em>
-      </div>
-    </div>
-  </div>
+    <app-hotel-list
+      [text]="text"
+      [hotels]="hotels"
+      [active]="active"
+      (setActive)="setActive($event)"
+    ></app-hotel-list>
+  </app-card>
 
-  <!--MAP-->
-  <div class="card map">
-    <div>
-      <img
-        src="https://www.mapquestapi.com/staticmap/v5/map?center={{
-          active?.location?.address
-        }}&size=500,200&key=Go3ZWai1i4nd2o7kBuAUs4y7pnpjXdZn"
-        width="100%"
-        height="200"
-      />
-      <div class="address">
-        <div class="font-big">{{ active?.name }}</div>
-        <div class="font-small">{{ active?.location?.address }}</div>
-      </div>
-    </div>
-  </div>
+  <app-card customCls="map" [padding]="false">
+    <app-gmap [active]="active"></app-gmap>
+  </app-card>
 
-  <!--INFO BOX-->
-  <div class="card">
-    <div class="content center">
-      <!--<img src="https://picsum.photos/400/200/?image=12" width="100%" height="200">-->
+  <app-card [centeredContent]="true">
+    <app-separator></app-separator>
+    <app-rates [active]="active"></app-rates>
+    <app-stars [stars]="active?.stars"></app-stars>
+    <br />
+    <app-reservations
+      [active]="active"
+      (addToCart)="cart.addToCart(active, $event)"
+    ></app-reservations>
+  </app-card>
 
-      <div class="separator"></div>
-      <div class="font-superbig">
-        {{active?.rate}}
-        <i class="ion-ios-person"></i>
-      </div>
-      <div>
-        <i *ngFor="let star of 5 | intToArray; let i = index"
-           class="icon"
-           [ngClass]="{
-            'ion-ios-star': i < active!.stars,
-            'ion-ios-star-outline': i >= active!.stars
-           }"
-        ></i>
-      </div>
+  <app-card customCls="gallery" [isScrollable]="true">
+    <app-image-gallery
+      [activeImage]="activeImage"
+      [active]="active"
+    ></app-image-gallery>
+  </app-card>
 
-      <br />
+  <app-card title="Services" customCls="services" [isScrollable]="true">
+    <app-services [active]="active"></app-services>
+  </app-card>
 
-      <div class="horiz-grid separator"
-      *ngFor="let room of active?.rooms">
-        <div>{{room.label}}</div>
-        <div>
-          {{room.price}}
-          <i class="ion-ios-cart"></i>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!--IMAGE GALLERY-->
-  <div class="card gallery scrollable">
-    <img [src]="activeImage" width="100%" height="150" />
-    <div class="nested">
-      <div *ngFor="let img of active?.images" (click)="activeImage = img">
-        <img [src]="img" width="100%" />
-      </div>
-    </div>
-  </div>
-
-  <!--SERVICES-->
-  <div class="card services scrollable">
-    <div class="title">Services</div>
-    <div class="nested">
-      <div *ngFor="let icon of active?.services">
-        <i [class]="'icon ion-ios-' + icon" [title]="icon"></i>
-      </div>
-    </div>
-  </div>
-
-  <!--CONTACT FORM-->
-  <div class="card contact">
-    <div class="title">Contacts</div>
-    <div class="content">
-      <form #contactForm="ngForm" (submit)="sendEmail(contactForm.value)">
-        <input
-          type="text"
-          placeholder="Your email*"
-          required
-          [ngModel]
-          name="email"
-        />
-        <textarea
-          cols="20"
-          rows="6"
-          placeholder="Your message*"
-          required
-          [ngModel]
-          name="message"
-        ></textarea>
-        <button type="submit" [disabled]="contactForm.invalid">SEND</button>
-      </form>
-    </div>
-  </div>
+  <app-card title="Contacts" customCls="contact">
+    <app-contact-form (sendEmail)="sendEmail($event)"></app-contact-form>
+  </app-card>
 </div>
